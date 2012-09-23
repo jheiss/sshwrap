@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require 'sshwrap'
+require 'optparse'
+
+@options = {}
+@cmd = nil
+
+opts = OptionParser.new(nil, 24, '  ')
+opts.banner = 'Usage: sshwrap [options]'
+opts.on('--command', '--cmd', '-c', '=CMD', 'Command to run') do |opt|
+  @cmd = opt
+end
+opts.on('--user', '-u', '=USER', 'SSH as specified user') do |opt|
+  @options[:user] = opt
+end
+opts.on('--ssh-key', '-k', '=KEY', 'Use the specified SSH private key') do |opt|
+  @options[:ssh_key] = opt
+end
+opts.on('--abort-on-failure', 'Abort if connection or command fails with any target') do |opt|
+  options[:abort_on_failure] = opt
+end
+opts.on('--max-workers', '=NUM', 'Use specified number of parallel connections') do |opt|
+  options[:max_workers] = opt
+end
+opts.on('--debug', 'Enable debugging') do |opt|
+  @options[:debug] = opt
+end
+
+leftovers = nil
+begin
+  leftovers = opts.parse(ARGV)
+rescue OptionParser::ParseError => e
+  $stderr.puts "Error parsing arguments, try --help"
+  $stderr.puts e.message
+  exit 1
+end
+@targets = leftovers
+
+sshwrap = SSHwrap::Main.new(@options)
+sshwrap.sshwrap(@cmd, @targets)

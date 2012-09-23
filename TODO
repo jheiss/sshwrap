@@ -1,0 +1,11 @@
+Options for displaying the output as the command runs on the various targets:
+
+* Immediate (lines from various targets intermingled)
+* Immediate, prefaced by hostname
+* Captured (lines for a target displayed together once command completes)
+
+Other ways of specifying targets:
+
+* stdin
+* groups, with user-supplied group expansion script
+* read from file
