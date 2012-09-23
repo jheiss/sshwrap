@@ -19,13 +19,13 @@ Or install it yourself as:
 
 ## Usage
 
-Usage: sshwrap [options]
-  -c, --command, --cmd=CMD Command to run
-  -u, --user=USER          SSH as specified user
-  -k, --ssh-key=KEY        Use the specified SSH private key
-      --abort-on-failure   Abort if connection or command fails with any target
-      --max-workers=NUM    Use specified number of parallel connections
-      --debug              Enable debugging
+    Usage: sshwrap [options]
+      -c, --command, --cmd=CMD Command to run
+      -u, --user=USER          SSH as specified user
+      -k, --ssh-key=KEY        Use the specified SSH private key
+          --abort-on-failure   Abort if connection or command fails with any target
+          --max-workers=NUM    Use specified number of parallel connections
+          --debug              Enable debugging
 
 ## Contributing
 
