@@ -27,6 +27,10 @@ class SSHwrap::Main
     elsif options[:password_regexp]
       @password_regexp = options[:password_regexp]
     else
+      # sudo on Mac OS X:
+      #   Password:
+      # sudo on Red Hat, Debian, Ubuntu:
+      #   [sudo] password for <user>:
       @password_regexp = /(Password: |\[sudo\] password for .*: )/
     end
   end
@@ -82,10 +86,6 @@ class SSHwrap::Main
             # if it's a password prompt, and interactively return data if so
             # (see request_pty above).
             channel.on_data do |ch_data, data|
-              # sudo on Mac OS X:
-              #   Password:
-              # sudo on Red Hat, Debian, Ubuntu:
-              #   [sudo] password for <user>:
               if data =~ @password_regexp
                 prompt = $1
                 channel.send_data "#{get_password(prompt)}\n"
