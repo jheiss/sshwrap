@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << File.expand_path('../lib', File.dirname(__FILE__))
 require 'sshwrap'
 require 'optparse'
 
