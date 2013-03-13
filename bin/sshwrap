@@ -7,7 +7,7 @@ require 'optparse'
 @cmd = nil
 
 opts = OptionParser.new(nil, 24, '  ')
-opts.banner = 'Usage: sshwrap [options]'
+opts.banner = 'Usage: sshwrap [options] host1 [host2 host3]'
 opts.on('--command', '--cmd', '-c', '=CMD', 'Command to run') do |opt|
   @cmd = opt
 end

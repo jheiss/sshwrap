@@ -19,7 +19,7 @@ Or install it yourself as:
 
 ## Usage
 
-    Usage: sshwrap [options]
+    Usage: sshwrap [options] host1 [host2 host3]
       -c, --command, --cmd=CMD Command to run
       -u, --user=USER          SSH as specified user
       -k, --ssh-key=KEY        Use the specified SSH private key
