@@ -5,16 +5,6 @@ optionally in parallel, and handles any sudo prompts that result.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'sshwrap'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
     $ gem install sshwrap
 
 ## Usage
