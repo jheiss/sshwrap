@@ -2,6 +2,21 @@ require 'etc'
 require 'yaml'
 require 'net/ssh'
 require 'highline/import'
+require 'sshwrap/prompter'
+
+# Monkey patch our prompt method into Net::SSH
+module Net::SSH
+  def KeyFactory.prompt(prompt, echo=true)
+    @prompter ||= SSHwrap::Prompter.new
+    @prompter.prompt(prompt + ' ', echo)
+  end
+  module Authentication::Methods
+    def KeyboardInteractive.prompt(prompt, echo=true)
+      @prompter ||= SSHwrap::Prompter.new
+      @prompter.prompt(prompt + ' ', echo)
+    end
+  end
+end
 
 class SSHwrap::Main
   def initialize(options={})
@@ -19,7 +34,7 @@ class SSHwrap::Main
     @user = options[:user] || Etc.getlogin
     @ssh_key = options[:ssh_key]
     @debug = options[:debug]
-    @passwords = {}
+    @prompter = SSHwrap::Prompter.new
     @ssh_prompt = "Password for #{@user}: "
     
     if conf['password_regexp']
@@ -35,15 +50,6 @@ class SSHwrap::Main
     end
   end
   
-  def get_password(prompt)
-    @mutex.synchronize do
-      if !@passwords[prompt]
-        @passwords[prompt] = ask(prompt) { |q| q.echo = "x" }
-      end
-    end
-    @passwords[prompt]
-  end
-  
   def ssh_execute(cmd, target)
     exitstatus = nil
     stdout = []
@@ -54,9 +60,9 @@ class SSHwrap::Main
       params[:keys] = [@ssh_key]
     end
     using_password = false
-    if @passwords[@ssh_prompt]
+    if @prompter.passwords[@ssh_prompt]
       using_password = true
-      params[:password] = @passwords[@ssh_prompt]
+      params[:password] = @prompter.passwords[@ssh_prompt]
     end
     
     begin
@@ -88,7 +94,7 @@ class SSHwrap::Main
             channel.on_data do |ch_data, data|
               if data =~ @password_regexp
                 prompt = $1
-                channel.send_data "#{get_password(prompt)}\n"
+                channel.send_data "#{@prompter.prompt(prompt)}\n"
               else
                 stdout << data unless (data.nil? or data.empty?)
               end
@@ -108,7 +114,7 @@ class SSHwrap::Main
       end
     rescue Net::SSH::AuthenticationFailed
       if !using_password
-        get_password(@ssh_prompt)
+        @prompter.prompt(@ssh_prompt)
         return ssh_execute(cmd, target)
       else
         stderr << "Authentication failed to #{target}"
