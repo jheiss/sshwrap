@@ -4,7 +4,7 @@ require File.expand_path('../lib/sshwrap/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ['Jason Heiss']
   gem.email         = ['jheiss@aput.net']
-  gem.description   = 'This provides a wrapper for ssh that execute a command on multiple machines, optionally in parallel, and handles any sudo prompts that result.'
+  gem.description   = 'This provides a wrapper for ssh that execute a command on multiple machines, optionally in parallel, and handles any ssh and sudo password prompts that result.'
   gem.summary       = 'Perform batch SSH operations, handling sudo prompts'
   gem.homepage      = 'https://github.com/jheiss/sshwrap'
 
