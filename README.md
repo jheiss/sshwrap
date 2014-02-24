@@ -1,6 +1,6 @@
 # SSHwrap
 
-This provides a wrapper for ssh that execute a command on multiple machines,
+This provides a wrapper for ssh that executes a command on multiple machines,
 optionally in parallel, and handles any ssh and sudo password prompts that
 result.
 
